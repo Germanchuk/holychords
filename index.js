@@ -14,7 +14,7 @@ async function runParser() {
     let stringWithResults = "";
     const $ = cheerio.load(page);
 
-    function processBlock($block) {
+    function processBlockToMd($block) {
         $block.contents().each((index, row) => {
             const $row = $(row);
             if ($row.hasClass(BLOCK_CHORDS_CLASS) && !$row.contents().length) {
@@ -56,7 +56,7 @@ async function runParser() {
     console.log("blocks_length: ", $blocks.length);
 
     $blocks.each((index, blockElement) => {
-        processBlock($(blockElement));
+        processBlockToMd($(blockElement));
     });
 
 
