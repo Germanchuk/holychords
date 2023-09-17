@@ -1,6 +1,5 @@
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
-const fileSystem = require("fs");
 
 const SONG_CONTENT_ID = "#music_text";
 const SONG_BLOCK_CLASS = ".blocks";
@@ -30,7 +29,7 @@ type Song = {
   content?: Array<Block>;
 };
 
-async function getParsedSong(url) {
+export default async function getParsedSong(url) {
   const $ = await getSelector(url);
 
   const $songContent = $(SONG_CONTENT_ID);
@@ -89,10 +88,7 @@ async function getParsedSong(url) {
     return song;
   }
 
-  const songString: string = JSON.stringify(song);
-
-  const filePath = "song.json";
-  fileSystem.writeFileSync(filePath, songString);
+  return song;
 }
 
 async function getSelector(url) {
@@ -119,37 +115,3 @@ async function getSelector(url) {
 
   return cheerio.load(html);
 }
-
-getParsedSong("https://holychords.pro/38733");
-
-const exampleObj = {
-  name: "Song name",
-  bpm: 123,
-  content: [
-    {
-      title: "Verse 1",
-      content: [
-        {
-          type: "chords",
-          content: ["G    Em"],
-        },
-        {
-          type: "text",
-          content: [
-            "Ла ла ла ла ла",
-            {
-              type: "hint",
-              color: "red",
-              text: "Тут вступає другий голос",
-            },
-            "Нана на на на",
-          ],
-        },
-      ],
-    },
-    {
-      title: "Chorus",
-      content: [{}],
-    },
-  ],
-};
